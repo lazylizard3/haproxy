@@ -77,7 +77,7 @@ do
 if grep -q in-range $f; then
         echo found
     else
-        mail -s "haproxy log alert test.sh" liangzhu@bii.a-star.edu.sg < $f && echo sent mail!
+        mail -s "haproxy log alert test.sh" somebody@somewhere.somedomain < $f && echo sent mail!
 fi
 done
 
