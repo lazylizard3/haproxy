@@ -85,7 +85,7 @@ done
         elif
         [ $? -ne 0 ] ; then
         #mail -s "haproxy log alert haproxy.sh $alert is not in $WHITELIST or range.conf" lazylizard@tonite.cu.cc < range.conf && echo $alert && alert='' && echo sent mail!
-        echo "haproxy log alert $alert is not in $WHITELIST or $IP_WHITE_RANGE" | /bin/mail -S mail.isonet.bii -s "isonet error $alert is not in $WHITELIST or $IP_WHITE_RANGE" systems@bii.a-star.edu.sg
+        echo "haproxy log alert $alert is not in $WHITELIST or $IP_WHITE_RANGE" | /bin/mail -S mail.isonet.bii -s "isonet error $alert is not in $WHITELIST or $IP_WHITE_RANGE" somebody@somewhere.somedomain
         fi
 
 echo $alert
