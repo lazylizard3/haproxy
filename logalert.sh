@@ -45,7 +45,7 @@ do
 	if grep -q in-range $f; then
         echo found
     else
-        sendmail liangzhu@bii.a-star.edu.sg < $f
+        sendmail somebody@somewhere.somedomain < $f
 fi
 
 done
