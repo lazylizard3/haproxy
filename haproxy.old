@@ -98,7 +98,7 @@ done
         continue
         elif
         [ $? -ne 0 ] ; then
-        mail -s "haproxy log alert haproxy.sh $alert is not in $WHITELIST or range.conf" lazylizard@tonite.cu.cc < range.conf && echo $alert && alert='' && echo sent mail!
+        mail -s "haproxy log alert haproxy.sh $alert is not in $WHITELIST or range.conf" somebody@somewhere.somedomain < range.conf && echo $alert && alert='' && echo sent mail!
         fi
 
 echo $alert
