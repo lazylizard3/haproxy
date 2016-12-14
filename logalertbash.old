@@ -1,0 +1,93 @@
+echo "" > a.alert.log
+
+grep -E -o '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)' haproxy.log > ip.log
+
+
+rm count.log
+rm *alert.log
+
+FILE=./ip.log;
+ for ip in `cat $FILE |cut -d ' ' -f 1 |sort |uniq`;
+ do { COUNT=`grep ^$ip $FILE |wc -l`;
+ if [[ "$COUNT" -gt "0" ]]; then echo "$COUNT:   $ip" >> count.log;
+ fi }; done
+
+
+cat count.log |cut -d ' ' -f 4 > column1.log
+
+
+
+
+while read line; 
+
+do
+#IN="bla@some.com;john@home.com"
+#read ADDR1 ADDR2 <<<$(IFS=";"; echo $IN)
+
+
+
+ip1=$line
+
+
+while read range;
+
+do
+
+read ip2 ip3 <<<$(IFS="-"; echo $range)
+
+function inet_aton ()
+{
+    local IFS=. ipaddr ip32 i
+    ipaddr=($1)
+    #echo $ipaddr" is ipaddr"
+    for i in 3 2 1 0
+    do
+        (( ip32 += ipaddr[3-i] * (256 ** i) ))
+    done
+    echo $ip32 > "$1".log
+    #eval "$1=$((ip32))"
+    #return $ip32
+    #echo $ip32" is ip32 "
+}
+
+inet_aton $ip1
+inet_aton $ip2
+inet_aton $ip3
+
+
+ip="$(cat $ip1.log)"
+min="$(cat $ip2.log)"
+max="$(cat $ip3.log)"
+
+
+(if [[ $ip -lt $min || $ip -gt $max ]]
+ then
+     echo "$ip1 in-range " >> ${ip1}-alert.log
+ else echo "$ip1 out-of-range " >> ${ip1}-alert.log
+fi
+)
+
+done < range.conf
+
+
+
+done < column1.log
+
+
+#if(val>=low && val<=high)print want " in-range" >> want"alert.log"
+#  else print want " out-of-range" >> want"alert.log"
+
+
+
+FILES="*alert.log"
+for f in $FILES
+do
+	if grep -q in-range $f; then
+        echo found
+    else
+        sendmail liangzhu@bii.a-star.edu.sg -s logalert  < $f
+fi
+
+done
+
+
